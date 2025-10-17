@@ -7,12 +7,15 @@
  - 当前AGI的常用模型
 
 **原文**: 
+
     With the rapid advancement of artificial intelligence, generative AI has been widely applied across various domains. Currently, mainstream AI image generation techniques primarily include Generative Adversarial Networks (GANs, e.g., StyleGAN), diffusion models (e.g., Stable Diffusion), and Transformer-based models (e.g., DALL·E)¹. These technologies are capable of producing highly realistic and creative visual content, significantly advancing fields such as digital art, advertising, and media production. However, this technological progress also brings serious ethical and security challenges. The proliferation of deepfakes, synthetic identity fabrication, and misleading visual content is intensifying risks such as online fraud, misinformation dissemination, reputational harm, and political manipulation². Therefore, the development of efficient and robust methods for detecting AI-generated images has become an urgent necessity to preserve digital content authenticity and uphold. societal trust.
 	
 **译文**: 
-随着人工智能技术的飞速发展，生成式AI被广泛应用于各个领域。目前，主流的AI图像生成技术主要包括以下几类：生成对抗网络（StyleGAN等）、扩散模型（Stable Diffusion）和基于Transformer的模型（DALL·E）¹。这些技术能够生成高度逼真且富有创意的视觉内容，极大地推动了数字艺术、广告设计和媒体制作的发展。然而，这种技术的进步也带来了严重的伦理与安全挑战。深度伪造（Deepfake）、虚假身份生成和误导性视觉内容的泛滥，正在加剧网络欺诈、虚假信息传播、名誉侵害和政治操纵等风险²。因此，开发高效、鲁棒的AI生成图像检测方法已成为维护数字内容真实性、保障社会信任体系的迫切需求。
+
+    随着人工智能技术的飞速发展，生成式AI被广泛应用于各个领域。目前，主流的AI图像生成技术主要包括以下几类：生成对抗网络（StyleGAN等）、扩散模型（Stable Diffusion）和基于Transformer的模型（DALL·E）¹。这些技术能够生成高度逼真且富有创意的视觉内容，极大地推动了数字艺术、广告设计和媒体制作的发展。然而，这种技术的进步也带来了严重的伦理与安全挑战。深度伪造（Deepfake）、虚假身份生成和误导性视觉内容的泛滥，正在加剧网络欺诈、虚假信息传播、名誉侵害和政治操纵等风险²。因此，开发高效、鲁棒的AI生成图像检测方法已成为维护数字内容真实性、保障社会信任体系的迫切需求。
 
 **References**:
+
 [1]A. Heidari et al., "Deepfake detection using deep learning methods: A systematic and comprehensive review," *Wiley Interdisciplinary Reviews: Data Mining and Knowledge Discovery*, vol. 14, no. 2, p. e1520, 2024.  
 
 [2]D. Park, H. Na, and D. Choi, "Performance comparison and visualization of ai-generated-image detection methods," *IEEE Access*, vol. 12, pp. 62609–62627, 2024.
