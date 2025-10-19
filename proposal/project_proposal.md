@@ -16,7 +16,7 @@ This study systematically evaluates existing detection approaches, identifies th
 | ZHANG, Shengqi |21209697 | Contribute to CNN Solutions Analysis |
 
 
-### Methodiligies
+### Methodologies
 
 
 #### Self Attention
