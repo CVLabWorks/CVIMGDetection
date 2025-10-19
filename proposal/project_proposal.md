@@ -39,7 +39,7 @@ Frequency domain analysis emerges as a promising approach because it targets the
 
 #### Convolutional Neural Networks (CNNs)
 
-CNNs defenitely revolutionized the computer vision field when they were raised since their hierarchical feature extraction naturally aligns with image detection tasks by progressively learning from pixel-level patterns to high-level semantics. Generated images, on the other hand, are prone to anomalies in details such as edges, lighting, color, and local texture; which can be used to distinguish generated images from real ones. Obviously, they have the benefits like Simplicity and Efficiency, however it has drawbacks such as weak generalization ability and lack of explainability. These make it it not the best choice for image dectecting task today.
+CNNs defenitely revolutionized the computer vision field when they were raised since their hierarchical feature extraction naturally aligns with image detection tasks by progressively learning from pixel-level patterns to high-level semantics. Generated images, on the other hand, are prone to anomalies in details such as edges, lighting, color, and local texture; which can be used to distinguish generated images from real ones. Obviously, they have the benefits like Simplicity and Efficiency, however it has drawbacks such as weak generalization ability and lack of explainability. These make it is not the best choice for image dectecting task today.
 
 
 ### Project Timeline
