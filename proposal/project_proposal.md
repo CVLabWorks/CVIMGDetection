@@ -1,7 +1,5 @@
-
-
-
 ### Universal Fake Image Detection System
+
 **SynthGuard: Universal Fake Image Detection System**
 
 ### Project Background introduction
@@ -13,10 +11,10 @@ This study systematically evaluates existing detection approaches, identifies th
 
 | Member  | Student ID | Primary Responsibility |
 |--------|---------------------|---------------------|
-|----||----|
-|SHEN, Wenyi|21205744|contribute to Diffusion solutions|
-|XU, Zeling|21214680|----|
-| ZHANG, Shengqi | | contribute to CNN solutions|
+|DOU,Mingze|21211793|Contribute to Transformer Solutions|
+|SHEN, Wenyi|21205744|Contribute to Diffusion Solutions|
+|XU, Zeling|21214680|Contribute to Frequency Domain Analysis|
+| ZHANG, Shengqi | | Contribute to CNN Solutions |
 
 
 ### Methodiligies
@@ -44,7 +42,7 @@ The rise of diffusion models has spurred the development of specialized detectio
 
 #### Self Attention
 
-The Vision Transformer (ViT), renowned for its powerful global modeling capability, has gained widespread recognition in AI-generated image detection due to its high accuracy and robustness. Various ViT variants—such as those trained on different datasets, DeiT (designed for small-sample scenarios), Swin Transformer, and CvT—are fundamentally built upon the original ViT architecture with structural modifications. Given the high cost and complexity of training from scratch, and considering the availability of well-established pretrained models, this study adopts the ViT-B/16 model pretrained on ImageNet-21k as the backbone network. Input images are resized to 224×224 RGB format, and the model leverages self-attention mechanisms to capture long-range dependencies across image patches. A single fully connected layer serves as the classification head, mapping the [CLS] token output to a binary classification space. During fine-tuning, the backbone is frozen while only the classification head is trained. Should performance prove insufficient, additional feature extraction layers may be introduced atop the backbone for further refinement.
+The Vision Transformer (ViT), renowned for its powerful global modeling capability, has gained widespread recognition in AI-generated image detection due to its high accuracy and robustness. Various ViT variants—such as those trained on different datasets, DeiT (designed for small-sample scenarios), Swin Transformer, and CvT—are fundamentally built upon the original ViT architecture with structural modifications. Given the high cost and complexity of training from scratch, and considering the availability of well-established pretrained models, this study adopts the ViT-B/16 model pretrained on ImageNet-21k as the backbone network. Input images are resized to 224×224 RGB format, and the model leverages self-attention mechanisms to capture long-range dependencies across image patches. A single fully connected layer serves as the classification head, mapping the CLS token output to a binary classification space. During fine-tuning, the backbone is frozen while only the classification head is trained. Should performance prove insufficient, additional feature extraction layers may be introduced atop the backbone for further refinement.
 
 
 
@@ -62,46 +60,50 @@ gantt
     dateFormat YYYY-MM-DD
     
     section Week 1
-    Dataset Construction           :a1, 2025-10-19, 7d
-    Deliverable: Dataset          :milestone, 2025-10-26, 0d
+    Dataset Collection & Processing    :a1, 2025-10-19, 7d
+    Deliverable: Dataset & Metrics    :milestone, 2025-10-26, 0d
     
     section Week 2
-    Baseline & Pipeline           :a2, 2025-10-27, 7d
-    Deliverable: Pipeline         :milestone, 2025-11-02, 0d
+    Baseline & Pipeline               :a2, 2025-10-27, 7d
+    Deliverable: Pipeline             :milestone, 2025-11-02, 0d
     
     section Week 3
-    Training & Optimization       :a3, 2025-11-03, 7d
-    Deliverable: Trained Model    :milestone, 2025-11-09, 0d
+    Model Deployment & Comparison     :a3, 2025-11-03, 7d
+    Deliverable: Model Variants       :milestone, 2025-11-09, 0d
     
     section Week 4
-    Testing & Evaluation          :a4, 2025-11-10, 7d
-    Deliverable: Results          :milestone, 2025-11-16, 0d
+    Model Training & Optimization     :a4, 2025-11-10, 7d
+    Deliverable: Trained Models       :milestone, 2025-11-16, 0d
     
     section Week 5
-    Documentation & Presentation  :a5, 2025-11-17, 7d
-    Deliverable: Final Submission :milestone, 2025-11-23, 0d
+    Robustness & Generalization       :a5, 2025-11-17, 7d
+    Deliverable: Evaluation Report    :milestone, 2025-11-23, 0d
     
-    section Buffer
-    Final Revisions               :crit, a6, 2025-11-24, 3d
+    section Week 6
+    Documentation & Presentation      :a6, 2025-11-24, 7d
+    Deliverable: Final Submission     :milestone, 2025-11-30, 0d
 ```
 
-**Week 1: Dataset Construction (Oct 19 - Oct 26)**
+**Week 1: Dataset Collection & Processing (Oct 19 - Oct 26)**
 
-We will download the ImageNet-1K validation set and generate synthetic images using multiple state-of-the-art generative models. The collected data will be split into training, validation, and test sets to ensure proper evaluation. The deliverable for this week is a structured dataset with complete metadata.
+We will collect real image datasets and generate synthetic images using multiple state-of-the-art generative models. The collected data will be preprocessed and split into training, validation, and test sets with proper stratification. We will also define evaluation metrics including accuracy, precision, recall, F1-score, etc. The deliverable for this week is a structured dataset with complete metadata and defined evaluation criteria.
 
 **Week 2: Baseline & Data Pipeline (Oct 27 - Nov 2)**
 
-We will implement a ResNet-50 baseline classifier and establish a robust data loading pipeline with standard augmentation techniques. Initial training experiments will be conducted to verify the pipeline functionality. The deliverable includes a working training pipeline and baseline performance results.
+We will implement a baseline classifier and establish a robust data loading pipeline with standard augmentation techniques. Initial training experiments will be conducted to verify the pipeline functionality. The deliverable includes a working training pipeline and baseline performance results.
 
-**Week 3: Model Training & Optimization (Nov 3 - Nov 9)**
+**Week 3: Model Deployment & Comparison (Nov 3 - Nov 9)**
 
-This week focuses on hyperparameter tuning and training the model on the full dataset. We will validate the model performance to ensure it meets the target accuracy threshold. The deliverable is a trained model checkpoint ready for comprehensive evaluation.
+This week focuses on deploying and comparing multiple detection approaches. We will implement CNN-based models, diffusion-based detectors, Vision Transformer variants, and frequency domain analysis methods. Preliminary comparative experiments will be conducted to identify the most promising architectures. The deliverable is a comprehensive comparison of different model architectures with initial performance benchmarks.
 
-**Week 4: Robustness & Generalization Testing (Nov 10 - Nov 16)**
+**Week 4: Model Training & Optimization (Nov 10 - Nov 16)**
 
-We will evaluate the trained model on the held-out test set and assess its generalization capability on images from unseen generators. Robustness tests will be conducted under various perturbations, and interpretability analysis will be performed to understand model decision-making. The deliverable is a comprehensive evaluation report.
+We will perform hyperparameter tuning and train selected models on the full dataset. This includes optimizing learning rates, batch sizes, augmentation strategies, and architecture-specific parameters. Model checkpoints will be saved at regular intervals. The deliverable is a set of well-trained model checkpoints ready for comprehensive evaluation.
 
-**Week 5: Documentation & Presentation (Nov 17 - Nov 23)**
+**Week 5: Robustness & Generalization Testing (Nov 17 - Nov 23)**
 
-The final week is dedicated to writing the technical report and preparing the presentation materials. We will also complete code documentation and repository cleanup to ensure reproducibility. The deliverables include the final report, presentation slides, and a well-documented code repository.
+We will evaluate trained models on the held-out test set and assess generalization capability on images from unseen generators. Robustness tests will be conducted under various perturbations (compression, noise, blur, etc.). Based on evaluation results, we will perform targeted optimization and fine-tuning to improve model performance. Interpretability analysis will be performed to understand model decision-making. The deliverable is a comprehensive evaluation report with optimized models.
 
+**Week 6: Documentation & Presentation (Nov 24 - Nov 30)**
+
+The final week is dedicated to writing the technical report and preparing presentation materials. We will complete code documentation and repository cleanup to ensure reproducibility. The deliverables include the final report, presentation slides, and a well-documented code repository.
