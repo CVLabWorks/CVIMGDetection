@@ -1,6 +1,5 @@
-### Universal Fake Image Detection System
+### AI-Generated Image Detection
 
-**SynthGuard: Universal Fake Image Detection System**
 
 ### Project Background introduction
 The proliferation of AI-generated imagery poses an unprecedented challenge to information integrity. High-fidelity synthetic images now permeate digital ecosystems, with the most sophisticated examples evading human detection. This capability has enabled malicious actors to manipulate public discourse for strategic and financial gain. Consequently, robust and efficient methods for distinguishing AI-generated from authentic imagery have become critically necessary.
@@ -40,16 +39,7 @@ Frequency domain analysis emerges as a promising approach because it targets the
 
 #### Convolutional Neural Networks (CNNs)
 
-CNNs defenitely revolutionized the computer vision field since Their hierarchical feature extraction naturally aligns with image detection tasks by progressively learning from pixel-level patterns to high-level semantics, which is a natural fit for image detection tasks.
-
-A well-performing CNN model can achieve hierarchical feature extraction while also being translation-invariant, making it highly sensitive to image microstructure. This allows it to effectively capture edges, texture, color distribution, local structure, and semantic information. Generated images, on the other hand, are prone to anomalies in details such as edges, lighting, color, and local texture; these differences can be used to distinguish generated images from real ones.
-
-Also, CNN models have the benefits as below:
-
-- **Efficiency**: Fast inference (10-15ms), low memory, deployable on edge devices
-- **Reliability**: Proven track record, stable training, achieves 92-94% baseline accuracy
-- **Simplicity**: Easy implementation, extensive pre-trained models, quick prototyping
-
+CNNs defenitely revolutionized the computer vision field when they were raised since their hierarchical feature extraction naturally aligns with image detection tasks by progressively learning from pixel-level patterns to high-level semantics. Generated images, on the other hand, are prone to anomalies in details such as edges, lighting, color, and local texture; which can be used to distinguish generated images from real ones. Obviously, they have the benefits like Simplicity and Efficiency, however it has drawbacks such as weak generalization ability and lack of explainability. These make it it not the best choice for image dectecting task today.
 
 
 ### Project Timeline
