@@ -1,8 +1,7 @@
 ### AI-Generated Image Detection
 
-
-### Project Background Introduction
-The proliferation of AI-generated imagery poses an unprecedented challenge to information integrity. High-fidelity synthetic images now permeate digital ecosystems, with the most sophisticated examples evading human detection. This capability has enabled malicious actors to manipulate public discourse for strategic and financial gain. Consequently, robust and efficient methods for distinguishing AI-generated from authentic imagery have become critically necessary.
+### Project Background introduction
+The proliferation of AI-generated images poses an unprecedented challenge to information integrity. High-fidelity synthetic images now permeate digital ecosystems, with the most sophisticated examples evading human detection. This capability has enabled malicious actors to manipulate public discourse for strategic and financial gain. Consequently, robust and efficient methods for distinguishing AI-generated from authentic image have become critically necessary.
 
 This study systematically evaluates existing detection approaches, identifies their limitations, and explores avenues for enhancement. We establish a comprehensive benchmark and propose incremental improvements to advance the state of detection capabilities.
 
@@ -37,9 +36,10 @@ While spatial-domain methods such as CNNs and Vision Transformers have demonstra
 
 Frequency domain analysis emerges as a promising approach because it targets the fundamental mathematical signatures left by the generation process itself. Regardless of how photorealistic an AI-generated image appears, the architectural constraints of generative models inevitably introduce characteristic patterns in the frequency spectrum. These patterns arise from upsampling operations inherent to both GAN and diffusion-based generators, creating spectral fingerprints that persist even as visual quality improves.
 
+
 #### Convolutional Neural Networks (CNNs)
 
-CNNs defenitely revolutionized the computer vision field when they were raised since their hierarchical feature extraction naturally aligns with image detection tasks by progressively learning from pixel-level patterns to high-level semantics. Generated images, on the other hand, are prone to anomalies in details such as edges, lighting, color, and local texture; which can be used to distinguish generated images from real ones. Obviously, they have the benefits like Simplicity and Efficiency, however it has drawbacks such as weak generalization ability and lack of explainability. These make it is not the best choice for image dectecting task today.
+CNNs definitely revolutionized the computer vision field when they were raised since their hierarchical feature extraction naturally aligns with image detection tasks by progressively learning from pixel-level patterns to high-level semantics. Generated images, on the other hand, are prone to anomalies in details such as edges, lighting, color, and local texture; which can be used to distinguish generated images from real ones. Obviously, they have the benefits like Simplicity and Efficiency, however they have drawbacks such as weak generalization ability and lack of explainability. These make it is not the best choice for image detecting task today.
 
 
 ### Project Timeline
