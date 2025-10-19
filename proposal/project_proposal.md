@@ -14,7 +14,7 @@ This study systematically evaluates existing detection approaches, identifies th
 | Member  | Student ID | Primary Responsibility |
 |--------|---------------------|---------------------|
 |----||----|
-|----||----|
+|SHEN, Wenyi|21205744|contribute to Diffusion solutions|
 |XU, Zeling|21214680|----|
 | ZHANG, Shengqi | | contribute to CNN solutions|
 
