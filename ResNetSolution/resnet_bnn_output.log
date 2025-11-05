@@ -1,0 +1,70 @@
+Results for imagenet_glide:
+              precision    recall  f1-score   support
+
+          ai       0.98      0.78      0.87       500
+      nature       0.82      0.99      0.89       500
+
+    accuracy                           0.88      1000
+   macro avg       0.90      0.88      0.88      1000
+weighted avg       0.90      0.88      0.88      1000
+
+Results for imagenet_midjourney:
+              precision    recall  f1-score   support
+
+          ai       0.68      0.81      0.74       500
+      nature       0.77      0.61      0.68       500
+
+    accuracy                           0.71      1000
+   macro avg       0.72      0.71      0.71      1000
+weighted avg       0.72      0.71      0.71      1000
+
+Results for imagenet_ai_0508_adm:
+              precision    recall  f1-score   support
+
+          ai       0.99      0.79      0.88       500
+      nature       0.83      0.99      0.90       500
+
+    accuracy                           0.89      1000
+   macro avg       0.91      0.89      0.89      1000
+weighted avg       0.91      0.89      0.89      1000
+
+Results for imagenet_ai_0419_biggan:
+              precision    recall  f1-score   support
+
+          ai       1.00      0.82      0.90       500
+      nature       0.84      1.00      0.92       500
+
+    accuracy                           0.91      1000
+   macro avg       0.92      0.91      0.91      1000
+weighted avg       0.92      0.91      0.91      1000
+
+Results for imagenet_ai_0424_wukong:
+              precision    recall  f1-score   support
+
+          ai       0.80      0.84      0.82       500
+      nature       0.83      0.79      0.81       500
+
+    accuracy                           0.82      1000
+   macro avg       0.82      0.82      0.82      1000
+weighted avg       0.82      0.82      0.82      1000
+
+Results for imagenet_ai_0424_sdv5:
+              precision    recall  f1-score   support
+
+          ai       0.78      0.82      0.80       500
+      nature       0.81      0.77      0.79       500
+
+    accuracy                           0.79      1000
+   macro avg       0.79      0.79      0.79      1000
+weighted avg       0.79      0.79      0.79      1000
+
+Results for imagenet_ai_0419_vqdm:
+              precision    recall  f1-score   support
+
+          ai       0.64      0.80      0.71       500
+      nature       0.73      0.56      0.64       500
+
+    accuracy                           0.68      1000
+   macro avg       0.69      0.68      0.67      1000
+weighted avg       0.69      0.68      0.67      1000
+

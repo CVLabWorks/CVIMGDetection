@@ -1,0 +1,82 @@
+Epoch 1/10, Loss: 0.5209
+Epoch 2/10, Loss: 0.4630
+Epoch 3/10, Loss: 0.4392
+Epoch 4/10, Loss: 0.4237
+Epoch 5/10, Loss: 0.4021
+Epoch 6/10, Loss: 0.3893
+Epoch 7/10, Loss: 0.3854
+Epoch 8/10, Loss: 0.3553
+Epoch 9/10, Loss: 0.3352
+Epoch 10/10, Loss: 0.3253
+Model checkpoint saved to model_checkpoint.pth
+Results for imagenet_glide:
+              precision    recall  f1-score   support
+
+          ai       0.83      1.00      0.91       500
+      nature       0.99      0.80      0.88       500
+
+    accuracy                           0.90      1000
+   macro avg       0.91      0.90      0.89      1000
+weighted avg       0.91      0.90      0.89      1000
+
+Results for imagenet_midjourney:
+              precision    recall  f1-score   support
+
+          ai       0.79      0.84      0.81       500
+      nature       0.83      0.78      0.80       500
+
+    accuracy                           0.81      1000
+   macro avg       0.81      0.81      0.81      1000
+weighted avg       0.81      0.81      0.81      1000
+
+Results for imagenet_ai_0508_adm:
+              precision    recall  f1-score   support
+
+          ai       0.84      0.99      0.91       500
+      nature       0.99      0.81      0.89       500
+
+    accuracy                           0.90      1000
+   macro avg       0.91      0.90      0.90      1000
+weighted avg       0.91      0.90      0.90      1000
+
+Results for imagenet_ai_0419_biggan:
+              precision    recall  f1-score   support
+
+          ai       0.84      0.99      0.91       500
+      nature       0.99      0.81      0.89       500
+
+    accuracy                           0.90      1000
+   macro avg       0.91      0.90      0.90      1000
+weighted avg       0.91      0.90      0.90      1000
+
+Results for imagenet_ai_0424_wukong:
+              precision    recall  f1-score   support
+
+          ai       0.83      0.93      0.88       500
+      nature       0.92      0.81      0.86       500
+
+    accuracy                           0.87      1000
+   macro avg       0.88      0.87      0.87      1000
+weighted avg       0.88      0.87      0.87      1000
+
+Results for imagenet_ai_0424_sdv5:
+              precision    recall  f1-score   support
+
+          ai       0.81      0.93      0.86       500
+      nature       0.92      0.78      0.84       500
+
+    accuracy                           0.85      1000
+   macro avg       0.86      0.85      0.85      1000
+weighted avg       0.86      0.85      0.85      1000
+
+Results for imagenet_ai_0419_vqdm:
+              precision    recall  f1-score   support
+
+          ai       0.79      0.79      0.79       500
+      nature       0.79      0.79      0.79       500
+
+    accuracy                           0.79      1000
+   macro avg       0.79      0.79      0.79      1000
+weighted avg       0.79      0.79      0.79      1000
+
+Results saved to results.json
