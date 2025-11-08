@@ -1,0 +1,191 @@
+{
+    "imagenet_glide": {
+        "nature": {
+            "precision": 0.8456260720411664,
+            "recall": 0.986,
+            "f1-score": 0.9104339796860572,
+            "support": 500.0
+        },
+        "ai": {
+            "precision": 0.9832134292565947,
+            "recall": 0.82,
+            "f1-score": 0.8942202835332607,
+            "support": 500.0
+        },
+        "accuracy": 0.903,
+        "macro avg": {
+            "precision": 0.9144197506488805,
+            "recall": 0.903,
+            "f1-score": 0.9023271316096589,
+            "support": 1000.0
+        },
+        "weighted avg": {
+            "precision": 0.9144197506488806,
+            "recall": 0.903,
+            "f1-score": 0.9023271316096588,
+            "support": 1000.0
+        }
+    },
+    "imagenet_midjourney": {
+        "nature": {
+            "precision": 0.8148984198645598,
+            "recall": 0.722,
+            "f1-score": 0.7656415694591728,
+            "support": 500.0
+        },
+        "ai": {
+            "precision": 0.7504488330341114,
+            "recall": 0.836,
+            "f1-score": 0.7909176915799432,
+            "support": 500.0
+        },
+        "accuracy": 0.779,
+        "macro avg": {
+            "precision": 0.7826736264493356,
+            "recall": 0.7789999999999999,
+            "f1-score": 0.7782796305195581,
+            "support": 1000.0
+        },
+        "weighted avg": {
+            "precision": 0.7826736264493356,
+            "recall": 0.779,
+            "f1-score": 0.778279630519558,
+            "support": 1000.0
+        }
+    },
+    "imagenet_ai_0508_adm": {
+        "nature": {
+            "precision": 0.8707360861759426,
+            "recall": 0.97,
+            "f1-score": 0.9176915799432356,
+            "support": 500.0
+        },
+        "ai": {
+            "precision": 0.9661399548532731,
+            "recall": 0.856,
+            "f1-score": 0.9077412513255567,
+            "support": 500.0
+        },
+        "accuracy": 0.913,
+        "macro avg": {
+            "precision": 0.9184380205146079,
+            "recall": 0.913,
+            "f1-score": 0.9127164156343961,
+            "support": 1000.0
+        },
+        "weighted avg": {
+            "precision": 0.9184380205146079,
+            "recall": 0.913,
+            "f1-score": 0.9127164156343961,
+            "support": 1000.0
+        }
+    },
+    "imagenet_ai_0419_biggan": {
+        "nature": {
+            "precision": 0.8736842105263158,
+            "recall": 0.996,
+            "f1-score": 0.930841121495327,
+            "support": 500.0
+        },
+        "ai": {
+            "precision": 0.9953488372093023,
+            "recall": 0.856,
+            "f1-score": 0.9204301075268817,
+            "support": 500.0
+        },
+        "accuracy": 0.926,
+        "macro avg": {
+            "precision": 0.934516523867809,
+            "recall": 0.9259999999999999,
+            "f1-score": 0.9256356145111044,
+            "support": 1000.0
+        },
+        "weighted avg": {
+            "precision": 0.9345165238678091,
+            "recall": 0.926,
+            "f1-score": 0.9256356145111043,
+            "support": 1000.0
+        }
+    },
+    "imagenet_ai_0424_wukong": {
+        "nature": {
+            "precision": 0.8651911468812877,
+            "recall": 0.86,
+            "f1-score": 0.8625877632898696,
+            "support": 500.0
+        },
+        "ai": {
+            "precision": 0.8608349900596421,
+            "recall": 0.866,
+            "f1-score": 0.8634097706879362,
+            "support": 500.0
+        },
+        "accuracy": 0.863,
+        "macro avg": {
+            "precision": 0.8630130684704649,
+            "recall": 0.863,
+            "f1-score": 0.862998766988903,
+            "support": 1000.0
+        },
+        "weighted avg": {
+            "precision": 0.863013068470465,
+            "recall": 0.863,
+            "f1-score": 0.8629987669889029,
+            "support": 1000.0
+        }
+    },
+    "imagenet_ai_0424_sdv5": {
+        "nature": {
+            "precision": 0.8542056074766355,
+            "recall": 0.914,
+            "f1-score": 0.8830917874396135,
+            "support": 500.0
+        },
+        "ai": {
+            "precision": 0.9075268817204301,
+            "recall": 0.844,
+            "f1-score": 0.8746113989637305,
+            "support": 500.0
+        },
+        "accuracy": 0.879,
+        "macro avg": {
+            "precision": 0.8808662445985328,
+            "recall": 0.879,
+            "f1-score": 0.878851593201672,
+            "support": 1000.0
+        },
+        "weighted avg": {
+            "precision": 0.8808662445985328,
+            "recall": 0.879,
+            "f1-score": 0.8788515932016719,
+            "support": 1000.0
+        }
+    },
+    "imagenet_ai_0419_vqdm": {
+        "nature": {
+            "precision": 0.84,
+            "recall": 0.798,
+            "f1-score": 0.8184615384615385,
+            "support": 500.0
+        },
+        "ai": {
+            "precision": 0.8076190476190476,
+            "recall": 0.848,
+            "f1-score": 0.8273170731707317,
+            "support": 500.0
+        },
+        "accuracy": 0.823,
+        "macro avg": {
+            "precision": 0.8238095238095238,
+            "recall": 0.823,
+            "f1-score": 0.8228893058161351,
+            "support": 1000.0
+        },
+        "weighted avg": {
+            "precision": 0.8238095238095239,
+            "recall": 0.823,
+            "f1-score": 0.822889305816135,
+            "support": 1000.0
+        }
+    }
+}
