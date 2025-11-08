@@ -1,11 +1,10 @@
 import os
+import sys
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torchvision import datasets, models
-from torchvision.transforms import v2
-from torch.utils.data import DataLoader, ConcatDataset
+from torchvision import models
 from sklearn.metrics import classification_report
 import json
 from torch.distributions import Normal, kl_divergence
@@ -14,12 +13,7 @@ import numpy as np
 from PIL import Image
 import argparse
 import matplotlib.pyplot as plt
-
-class ImageFolderWithPaths(datasets.ImageFolder):
-    def __getitem__(self, index):
-        img, label = super().__getitem__(index)
-        path = self.samples[index][0]
-        return img, label, path
+from utils import init_checkpoint_dir, init_results_dir, init_logs_dir, DualLogger, CHECKPOINT_DIR, RESULTS_DIR, LOGS_DIR, get_data_loaders
 
 class BayesianLinear(nn.Module):
     def __init__(self, in_features, out_features):
@@ -103,44 +97,6 @@ class ResNet50_BNN(nn.Module):
 def get_model(num_classes=2):
     return ResNet50_BNN(num_classes)
 
-def get_data_loaders(data_dir, batch_size=32):
-    # Data transformations using v2
-    transform = v2.Compose([
-        v2.Resize((224, 224)),
-        v2.RandomHorizontalFlip(),
-        v2.ToImage(),                # Convert to Image type
-        v2.ToDtype(torch.float32, scale=True),
-        v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
-
-    # Get all subfolders (different AI types)
-    ai_types = [d for d in os.listdir(data_dir) if os.path.isdir(os.path.join(data_dir, d))]
-
-    train_datasets = []
-    val_datasets = {}
-
-    for ai_type in ai_types:
-        train_dir = os.path.join(data_dir, ai_type, 'train')
-        val_dir = os.path.join(data_dir, ai_type, 'val')
-
-        # Load train data
-        train_dataset = ImageFolderWithPaths(train_dir, transform=transform)
-        train_datasets.append(train_dataset)
-
-        # Load val data
-        val_dataset = ImageFolderWithPaths(val_dir, transform=transform)
-        val_datasets[ai_type] = val_dataset
-
-    # Combine all train datasets
-    combined_train_dataset = ConcatDataset(train_datasets)
-    train_loader = DataLoader(combined_train_dataset, batch_size=batch_size, shuffle=True)
-
-    # Create val loaders for each type
-    val_loaders = {ai_type: DataLoader(val_datasets[ai_type], batch_size=batch_size, shuffle=False)
-                   for ai_type in ai_types}
-
-    return train_loader, val_loaders
-
 def train_model(model, train_loader, optimizer, num_epochs=10, device='cuda'):
     model.to(device)
     for epoch in range(num_epochs):
@@ -167,8 +123,6 @@ def evaluate_model(model, val_loaders, device='cuda', num_samples=50):
     model.to(device)
     model.eval()
     results = {}
-    all_fake_probs = []  # To record probabilities for fake images
-    fake_details = []  # List of dicts with path, prob, reasoning
     with torch.no_grad():
         for ai_type, val_loader in val_loaders.items():
             all_preds = []
@@ -176,8 +130,10 @@ def evaluate_model(model, val_loaders, device='cuda', num_samples=50):
             fake_probs = []
             for inputs, labels, paths in val_loader:
                 inputs, labels = inputs.to(device), labels.to(device)
-                # Extract features from ResNet
-                features = model.resnet(inputs).view(inputs.size(0), -1)
+                # Extract features from ResNet with attention and avgpool (same as forward)
+                features_map = model.resnet(inputs)  # [B, 2048, 7, 7]
+                features_map = model.attention(features_map)
+                features = model.avgpool(features_map).view(inputs.size(0), -1)  # [B, 2048]
                 # Get multiple samples for uncertainty
                 predictions = []
                 for _ in range(num_samples):
@@ -193,38 +149,29 @@ def evaluate_model(model, val_loaders, device='cuda', num_samples=50):
                 fake_mask = (preds == 1).cpu()
                 if fake_mask.any():
                     fake_probs.extend(mean_probs[fake_mask, 1].cpu().numpy())
-                    for idx in fake_mask.nonzero(as_tuple=True)[0]:
-                        path = paths[idx]
-                        prob = mean_probs[idx, 1].item()
-                        feature = features[idx]
-                        # Compute mean logit for class 1
-                        mean_weight = model.classifier.weight_mu[1]
-                        mean_bias = model.classifier.bias_mu[1]
-                        logit = torch.dot(mean_weight, feature) + mean_bias
-                        # Generate reasoning based on the image's specific features
-                        # Find top contributing features (dimensions where weight * feature is high)
-                        contributions = mean_weight * feature
-                        top_contrib_indices = torch.topk(contributions, 5).indices.tolist()
-                        reasoning = f"This image has a {prob:.1%} probability of being fake based on its ResNet50 features. The logit for the 'ai' class is {logit:.2f}, with strong contributions from feature dimensions {top_contrib_indices}, suggesting AI-generated characteristics in those aspects."
-                        fake_details.append({
-                            'path': path,
-                            'probability_fake': prob,
-                            'reasoning': reasoning
-                        })
-                        print(f"Image {path}: {reasoning}")
-            all_fake_probs.extend(fake_probs)
             report = classification_report(all_labels, all_preds, target_names=['nature', 'ai'], output_dict=True)
             results[ai_type] = report
             print(f'Results for {ai_type}:')
             print(classification_report(all_labels, all_preds, target_names=['nature', 'ai']))
             if fake_probs:
                 print(f'Fake probabilities for {ai_type}: mean={sum(fake_probs)/len(fake_probs):.4f}, samples={len(fake_probs)}')
-    return results, all_fake_probs, fake_details
+    return results
 
-def main():
+def train():
+    """Train the model and save checkpoint."""
+    # Initialize directories
+    init_checkpoint_dir()
+    init_results_dir()
+    init_logs_dir()
+    
+    # Setup logging
+    log_file = os.path.join(LOGS_DIR, 'resnet_bnn_with_attention.log')
+    open(log_file, 'w').close()  # Clear log file
+    sys.stdout = DualLogger(log_file)
+    
     data_dir = './datasets'
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+    
     # Load data
     train_loader, val_loaders = get_data_loaders(data_dir)
 
@@ -236,26 +183,76 @@ def main():
     train_model(model, train_loader, optimizer, num_epochs=10, device=device)
 
     # Save model checkpoint
+    checkpoint_path = os.path.join(CHECKPOINT_DIR, 'model_resnet_bnn_with_attention_checkpoint.pth')
     torch.save({
         'model_state_dict': model.state_dict(),
         'optimizer_state_dict': optimizer.state_dict(),
         'epoch': 10,
-    }, 'model_bnn_with_attention_checkpoint.pth')
-    print("Model checkpoint saved to model_bnn_with_attention_checkpoint.pth")
+    }, checkpoint_path)
+    print(f"Model checkpoint saved to {checkpoint_path}")
 
     # Evaluate and record results
-    results, fake_probs, fake_details = evaluate_model(model, val_loaders, device=device)
+    results = evaluate_model(model, val_loaders, device=device)
 
     # Save results to JSON
-    with open('results_bnn_attention.json', 'w') as f:
+    results_file = os.path.join(RESULTS_DIR, 'results_resnet_bnn_with_attention.json')
+    with open(results_file, 'w') as f:
         json.dump(results, f, indent=4)
 
-    # Save fake probabilities and details
-    with open('fake_details_bnn_attention.json', 'w') as f:
-        json.dump(fake_details, f, indent=4)
+    print(f"Results saved to {results_file}")
 
-    print("Results saved to results_bnn_attention.json")
-    print("Fake details saved to fake_details_bnn_attention.json")
+def main():
+    """Load trained model from checkpoint, or train if not exists, then evaluate."""
+    # Initialize directories
+    init_checkpoint_dir()
+    init_results_dir()
+    init_logs_dir()
+    
+    # Setup logging
+    log_file = os.path.join(LOGS_DIR, 'resnet_bnn_with_attention.log')
+    open(log_file, 'w').close()  # Clear log file
+    sys.stdout = DualLogger(log_file)
+    
+    data_dir = './datasets'
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    checkpoint_path = os.path.join(CHECKPOINT_DIR, 'model_resnet_bnn_with_attention_checkpoint.pth')
+    
+    # Load data
+    train_loader, val_loaders = get_data_loaders(data_dir)
+    
+    # Initialize model and optimizer
+    model = get_model()
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    
+    # Check if checkpoint exists
+    if os.path.exists(checkpoint_path):
+        print(f"Loading checkpoint from {checkpoint_path}")
+        checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=False)
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        print("Checkpoint loaded successfully")
+    else:
+        # Train the model
+        print("No checkpoint found, training model...")
+        train_model(model, train_loader, optimizer, num_epochs=10, device=device)
+        
+        # Save model checkpoint
+        torch.save({
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'epoch': 10,
+        }, checkpoint_path)
+        print(f"Model checkpoint saved to {checkpoint_path}")
+    
+    # Evaluate and record results
+    results = evaluate_model(model, val_loaders, device=device)
+    
+    # Save results to JSON
+    results_file = os.path.join(RESULTS_DIR, 'results_resnet_bnn_with_attention.json')
+    with open(results_file, 'w') as f:
+        json.dump(results, f, indent=4)
+    
+    print(f"Results saved to {results_file}")
 
 def generate_gradcam(model, input_tensor, target_class):
     """
@@ -361,7 +358,8 @@ def test_image(model, image_path, device='cuda', save_path='heatmap.jpg'):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train or Test ResNet50-BNN with Attention and Explanation')
-    parser.add_argument('--test_image', type=str, help='Relative path to image for testing (trains if not provided)')
+    parser.add_argument('--test_image', type=str, help='Relative path to image for testing')
+    parser.add_argument('--train', action='store_true', help='Train the model (default is evaluate)')
     args = parser.parse_args()
 
     if args.test_image:
@@ -369,12 +367,14 @@ if __name__ == '__main__':
             print(f"Image file {args.test_image} does not exist.")
             exit(1)
         model = get_model()
-        checkpoint_path = 'model_bnn_with_attention_checkpoint.pth'
+        checkpoint_path = os.path.join(CHECKPOINT_DIR, 'model_resnet_bnn_with_attention_checkpoint.pth')
         if not os.path.exists(checkpoint_path):
             print(f"Model checkpoint {checkpoint_path} not found. Please train first.")
             exit(1)
-        model.load_state_dict(torch.load(checkpoint_path)['model_state_dict'])
+        model.load_state_dict(torch.load(checkpoint_path, weights_only=False)['model_state_dict'])
         save_path = os.path.splitext(args.test_image)[0] + '_heatmap.jpg'
         test_image(model, args.test_image, save_path=save_path)
+    elif args.train:
+        train()
     else:
         main()

@@ -2,17 +2,10 @@ import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torchvision import datasets, models
-from torchvision.transforms import v2
-from torch.utils.data import DataLoader, ConcatDataset
+from torchvision import models
 from sklearn.metrics import classification_report
 import json
-
-class ImageFolderWithPaths(datasets.ImageFolder):
-    def __getitem__(self, index):
-        img, label = super().__getitem__(index)
-        path = self.samples[index][0]
-        return img, label, path
+from utils import init_checkpoint_dir, init_results_dir, init_logs_dir, DualLogger, CHECKPOINT_DIR, RESULTS_DIR, LOGS_DIR, get_data_loaders
 
 class ResNet50Softmax(nn.Module):
     def __init__(self, num_classes=2):
@@ -28,44 +21,6 @@ class ResNet50Softmax(nn.Module):
 
 def get_model(num_classes=2):
     return ResNet50Softmax(num_classes)
-
-def get_data_loaders(data_dir, batch_size=32):
-    # Data transformations using v2
-    transform = v2.Compose([
-        v2.Resize((224, 224)),
-        v2.RandomHorizontalFlip(),
-        v2.ToImage(),                # Convert to Image type
-        v2.ToDtype(torch.float32, scale=True),
-        v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
-
-    # Get all subfolders (different AI types)
-    ai_types = [d for d in os.listdir(data_dir) if os.path.isdir(os.path.join(data_dir, d))]
-
-    train_datasets = []
-    val_datasets = {}
-
-    for ai_type in ai_types:
-        train_dir = os.path.join(data_dir, ai_type, 'train')
-        val_dir = os.path.join(data_dir, ai_type, 'val')
-
-        # Load train data
-        train_dataset = ImageFolderWithPaths(train_dir, transform=transform)
-        train_datasets.append(train_dataset)
-
-        # Load val data
-        val_dataset = ImageFolderWithPaths(val_dir, transform=transform)
-        val_datasets[ai_type] = val_dataset
-
-    # Combine all train datasets
-    combined_train_dataset = ConcatDataset(train_datasets)
-    train_loader = DataLoader(combined_train_dataset, batch_size=batch_size, shuffle=True)
-
-    # Create val loaders for each type
-    val_loaders = {ai_type: DataLoader(val_datasets[ai_type], batch_size=batch_size, shuffle=False)
-                   for ai_type in ai_types}
-
-    return train_loader, val_loaders
 
 def train_model(model, train_loader, optimizer, num_epochs=10, device='cuda'):
     model.to(device)
@@ -102,12 +57,6 @@ def evaluate_model(model, val_loaders, device='cuda'):
                 _, preds = torch.max(probs, 1)
                 all_preds.extend(preds.cpu().numpy())
                 all_labels.extend(labels.cpu().numpy())
-                # Record per image probabilities
-                for i in range(len(paths)):
-                    path = paths[i]
-                    prob_ai = probs[i, 0].item()  # Assuming class 0 is ai (fake)
-                    prob_nature = probs[i, 1].item()  # class 1 nature (real)
-                    print(f'{path}: AI(fake) prob: {prob_ai:.4f}, Nature(real) prob: {prob_nature:.4f}')
             report = classification_report(all_labels, all_preds, target_names=['ai', 'nature'], output_dict=True)
             results[ai_type] = report
             print(f'Results for {ai_type}:')
@@ -115,6 +64,17 @@ def evaluate_model(model, val_loaders, device='cuda'):
     return results
 
 def main():
+    # Initialize directories
+    init_checkpoint_dir()
+    init_results_dir()
+    init_logs_dir()
+    
+    # Setup logging
+    log_file = os.path.join(LOGS_DIR, 'resnet_softmax.log')
+    open(log_file, 'w').close()  # Clear log file
+    import sys
+    sys.stdout = DualLogger(log_file)
+    
     data_dir = './datasets'
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -125,25 +85,36 @@ def main():
     model = get_model()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    # Train the model
-    train_model(model, train_loader, optimizer, num_epochs=10, device=device)
+    # Check if checkpoint exists
+    checkpoint_path = os.path.join(CHECKPOINT_DIR, 'model_resnet_softmax_checkpoint.pth')
+    if os.path.exists(checkpoint_path):
+        print(f"Loading checkpoint from {checkpoint_path}")
+        checkpoint = torch.load(checkpoint_path, map_location=device)
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        print("Checkpoint loaded successfully")
+    else:
+        # Train the model
+        print("No checkpoint found, training model...")
+        train_model(model, train_loader, optimizer, num_epochs=10, device=device)
 
-    # Save model checkpoint
-    torch.save({
-        'model_state_dict': model.state_dict(),
-        'optimizer_state_dict': optimizer.state_dict(),
-        'epoch': 10,
-    }, 'model_softmax_checkpoint.pth')
-    print("Model checkpoint saved to model_softmax_checkpoint.pth")
+        # Save model checkpoint
+        torch.save({
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'epoch': 10,
+        }, checkpoint_path)
+        print(f"Model checkpoint saved to {checkpoint_path}")
 
     # Evaluate and record results
     results = evaluate_model(model, val_loaders, device=device)
 
     # Save results to JSON
-    with open('results_softmax.json', 'w') as f:
+    results_file = os.path.join(RESULTS_DIR, 'results_resnet_softmax.json')
+    with open(results_file, 'w') as f:
         json.dump(results, f, indent=4)
 
-    print("Results saved to results_softmax.json")
+    print(f"Results saved to {results_file}")
 
 if __name__ == '__main__':
     main()
