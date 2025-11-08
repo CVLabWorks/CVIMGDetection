@@ -1,5 +1,9 @@
 # ViT模型训练和结果
 
+## 数据处理
+使用tiny_genimage,data里两个文件负责读取和融合，最后生成mergedata。
+原数据集太大没有上传。
+
 ## 训练设置
 epoch：50
 Opt：AMP
