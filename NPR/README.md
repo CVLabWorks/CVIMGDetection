@@ -7,6 +7,8 @@
 修改配置与超参数在./options/。
 
 数据集genimage置于项目根目录下，遵循格式：
+
+<pre>
 ./genimage/
 ├── adm/
 │   ├── nature/
@@ -24,6 +26,7 @@
 │   ├── nature/
 │   └── ai/
 └── ... (其他类别)
+</pre>
 
 ## 改进点
 
