@@ -140,13 +140,13 @@ if __name__ == '__main__':
       model_state = state_dict
       print("Using entire state_dict for model weights")
 
-    model = torch.nn.DataParallel(model)
+    # model = torch.nn.DataParallel(model)
     model.load_state_dict(model_state)
     model.cuda()
     model.eval()
     
     # 使用详细的验证函数
-    acc, avg_precision = detailed_validate(model, opt)
+    # acc, avg_precision = validate(model, opt)
     
     # 也可以使用常规验证函数查看每个类别指标
     print("\n\nADDITIONAL PER-CLASS METRICS:")

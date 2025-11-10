@@ -100,8 +100,8 @@ if __name__ == '__main__':
 
         # Validation
         model.eval()
-        # acc, ap = validate(model.model, val_opt)[:2]
-        acc, ap = detailed_validate(model.model, val_opt)
+        acc, ap = validate(model.model, val_opt)[:2]
+        # acc, ap = detailed_validate(model.model, val_opt)
         val_writer.add_scalar('accuracy', acc, model.total_steps)
         val_writer.add_scalar('ap', ap, model.total_steps)
         print("(Val @ epoch {}) acc: {}; ap: {}".format(epoch, acc, ap))
