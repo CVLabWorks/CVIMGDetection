@@ -7,12 +7,13 @@ import argparse
 from PIL import Image
 from tensorboardX import SummaryWriter
 import numpy as np
-from validate import validate
+from validate import validate, detailed_validate
 from data import create_dataloader
 from networks.trainer import Trainer
 from options.train_options import TrainOptions
 from options.test_options import TestOptions
 from util import Logger
+from sklearn.metrics import precision_score, classification_report, confusion_matrix
 
 import random
 def seed_torch(seed=1029):
@@ -99,7 +100,8 @@ if __name__ == '__main__':
 
         # Validation
         model.eval()
-        acc, ap = validate(model.model, val_opt)[:2]
+        # acc, ap = validate(model.model, val_opt)[:2]
+        acc, ap = detailed_validate(model.model, val_opt)
         val_writer.add_scalar('accuracy', acc, model.total_steps)
         val_writer.add_scalar('ap', ap, model.total_steps)
         print("(Val @ epoch {}) acc: {}; ap: {}".format(epoch, acc, ap))
@@ -108,6 +110,4 @@ if __name__ == '__main__':
 
     # model.eval();testmodel()
     model.save_networks('last')
-
-
     
