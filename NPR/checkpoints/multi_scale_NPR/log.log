@@ -1,0 +1,529 @@
+train.py  --model_path  ./NPR.pth
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+cwd: /content/drive/MyDrive/NPR
+2025_11_12_17_14_14 Train loss: 0.4004965126514435 at step: 400 lr 0.0002
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0098, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 72.77%
+  - Precision: 75.83%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 76.80%
+  - Precision: 73.83%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 74.79%
+  - Average Precision: 84.85%
+==================================================
+(Val @ epoch 0) acc: 0.7478571428571429; ap: 0.8484694422731749
+2025_11_12_17_27_20 Train loss: 0.37751007080078125 at step: 800 lr 0.0002
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0004, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 77.20%
+  - Precision: 87.96%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 89.43%
+  - Precision: 79.68%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 83.31%
+  - Average Precision: 93.32%
+==================================================
+(Val @ epoch 1) acc: 0.8331428571428572; ap: 0.9331824266663077
+2025_11_12_17_33_32 Train loss: 0.35238373279571533 at step: 1200 lr 0.0002
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 84.74%
+  - Precision: 90.18%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 90.77%
+  - Precision: 85.61%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 87.76%
+  - Average Precision: 95.70%
+==================================================
+(Val @ epoch 2) acc: 0.8775714285714286; ap: 0.9570373160874732
+2025_11_12_17_39_46 Train loss: 0.28504204750061035 at step: 1600 lr 0.0002
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 86.91%
+  - Precision: 95.21%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 95.63%
+  - Precision: 87.96%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 91.27%
+  - Average Precision: 98.05%
+==================================================
+(Val @ epoch 3) acc: 0.9127142857142857; ap: 0.9805321904822867
+2025_11_12_17_45_55 Train loss: 0.20952585339546204 at step: 2000 lr 0.0002
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 87.09%
+  - Precision: 96.36%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 96.71%
+  - Precision: 88.22%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 91.90%
+  - Average Precision: 98.38%
+==================================================
+(Val @ epoch 4) acc: 0.919; ap: 0.983834309987599
+2025_11_12_17_52_05 Train loss: 0.2597200274467468 at step: 2400 lr 0.0002
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 85.74%
+  - Precision: 95.91%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 96.34%
+  - Precision: 87.11%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 91.04%
+  - Average Precision: 98.13%
+==================================================
+(Val @ epoch 5) acc: 0.9104285714285715; ap: 0.9813414581006938
+2025_11_12_17_58_21 Train loss: 0.16205847263336182 at step: 2800 lr 0.0002
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 95.26%
+  - Precision: 92.74%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 92.54%
+  - Precision: 95.12%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 93.90%
+  - Average Precision: 98.59%
+==================================================
+(Val @ epoch 6) acc: 0.939; ap: 0.9858956918854852
+2025_11_12_18_04_34 Train loss: 0.12112545222043991 at step: 3200 lr 0.0002
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 93.14%
+  - Precision: 94.77%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 94.86%
+  - Precision: 93.26%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 94.00%
+  - Average Precision: 98.62%
+==================================================
+(Val @ epoch 7) acc: 0.94; ap: 0.9862215624841218
+2025_11_12_18_10_44 Train loss: 0.09446059167385101 at step: 3600 lr 0.0002
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 91.17%
+  - Precision: 96.46%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 96.66%
+  - Precision: 91.63%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 93.91%
+  - Average Precision: 98.91%
+==================================================
+(Val @ epoch 8) acc: 0.9391428571428572; ap: 0.989060037798203
+2025_11_12_18_16_56 Train loss: 0.1259412169456482 at step: 4000 lr 0.0002
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 98.03%
+  - Precision: 90.41%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 89.60%
+  - Precision: 97.85%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 93.81%
+  - Average Precision: 98.98%
+==================================================
+(Val @ epoch 9) acc: 0.9381428571428572; ap: 0.9897807437628413
+2025_11_12_18_23_10 Train loss: 0.0999019593000412 at step: 4400 lr 0.0002
+2025_11_12_18_28_03 Train loss: 0.10298600792884827 at step: 4800 lr 0.0002
+2025_11_12_18_28_14 changing lr at the end of epoch 10, iters 4818
+*************************
+Changing lr from 0.0002 to 0.00018
+*************************
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 90.03%
+  - Precision: 96.60%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 96.83%
+  - Precision: 90.66%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 93.43%
+  - Average Precision: 98.63%
+==================================================
+(Val @ epoch 10) acc: 0.9342857142857143; ap: 0.9862578766719714
+2025_11_12_18_34_14 Train loss: 0.10770135372877121 at step: 5200 lr 0.00018
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 92.83%
+  - Precision: 97.30%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 97.43%
+  - Precision: 93.14%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 95.13%
+  - Average Precision: 99.26%
+==================================================
+(Val @ epoch 11) acc: 0.9512857142857143; ap: 0.9925919452570772
+2025_11_12_18_40_26 Train loss: 0.10467161238193512 at step: 5600 lr 0.00018
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 94.97%
+  - Precision: 96.66%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 96.71%
+  - Precision: 95.06%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 95.84%
+  - Average Precision: 99.26%
+==================================================
+(Val @ epoch 12) acc: 0.9584285714285714; ap: 0.9926459853783255
+2025_11_12_18_46_39 Train loss: 0.0710727721452713 at step: 6000 lr 0.00018
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 97.46%
+  - Precision: 95.92%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 95.86%
+  - Precision: 97.42%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 96.66%
+  - Average Precision: 99.45%
+==================================================
+(Val @ epoch 13) acc: 0.9665714285714285; ap: 0.9944671158948126
+2025_11_12_18_52_55 Train loss: 0.12253787368535995 at step: 6400 lr 0.00018
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 95.94%
+  - Precision: 95.56%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 95.54%
+  - Precision: 95.93%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 95.74%
+  - Average Precision: 99.35%
+==================================================
+(Val @ epoch 14) acc: 0.9574285714285714; ap: 0.9934814349561354
+2025_11_12_18_59_13 Train loss: 0.10336166620254517 at step: 6800 lr 0.00018
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 91.26%
+  - Precision: 98.70%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 98.80%
+  - Precision: 91.87%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 95.03%
+  - Average Precision: 99.38%
+==================================================
+(Val @ epoch 15) acc: 0.9502857142857143; ap: 0.9937742969828434
+2025_11_12_19_05_31 Train loss: 0.11395163834095001 at step: 7200 lr 0.00018
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 98.69%
+  - Precision: 94.40%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 94.14%
+  - Precision: 98.62%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 96.41%
+  - Average Precision: 99.44%
+==================================================
+(Val @ epoch 16) acc: 0.9641428571428572; ap: 0.9943901450817152
+2025_11_12_19_11_48 Train loss: 0.07692690193653107 at step: 7600 lr 0.00018
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 95.94%
+  - Precision: 97.73%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 97.77%
+  - Precision: 96.02%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 96.86%
+  - Average Precision: 99.57%
+==================================================
+(Val @ epoch 17) acc: 0.9685714285714285; ap: 0.9956640383182707
+2025_11_12_19_18_07 Train loss: 0.13951376080513 at step: 8000 lr 0.00018
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 93.46%
+  - Precision: 97.55%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 97.66%
+  - Precision: 93.72%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 95.56%
+  - Average Precision: 99.29%
+==================================================
+(Val @ epoch 18) acc: 0.9555714285714285; ap: 0.9928898004919349
+2025_11_12_19_24_28 Train loss: 0.11299214512109756 at step: 8400 lr 0.00018
+Found classes: ['adm', 'biggan', 'glide', 'midjourney', 'sdv5', 'vqdm', 'wukong']
+Total samples: 7000
+Real images (label 0): 3500
+Fake images (label 1): 3500
+Unique labels: [0 1]
+Predictions range: [0.0000, 1.0000]
+
+==================================================
+PER-CLASS METRICS:
+==================================================
+Real Images (Class 0):
+  - Accuracy: 95.40%
+  - Precision: 96.09%
+  - Support: 3500 samples
+
+Fake Images (Class 1):
+  - Accuracy: 96.11%
+  - Precision: 95.43%
+  - Support: 3500 samples
+
+OVERALL METRICS:
+  - Accuracy: 95.76%
+  - Average Precision: 99.21%
+==================================================
+(Val @ epoch 19) acc: 0.9575714285714285; ap: 0.9921465122806872
+Saving model ./checkpoints/7class-adm-biggan-glide-midjourney-sdv5-vqdm-wukong2025_11_12_16_51_24/model_epoch_last.pth
