@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import models
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, roc_auc_score
 import json
 from torch.distributions import Normal, kl_divergence
 from utils import init_checkpoint_dir, init_results_dir, init_logs_dir, DualLogger, CHECKPOINT_DIR, RESULTS_DIR, LOGS_DIR, get_data_loaders
@@ -105,7 +105,8 @@ def evaluate_model(model, val_loaders, device='cuda', num_samples=50):
         for ai_type, val_loader in val_loaders.items():
             all_preds = []
             all_labels = []
-            fake_probs = []
+            all_fake_probs = [] # Store prob of being fake for all samples
+            fake_probs = []     # Store prob of being fake only for predicted fake samples
             for inputs, labels, paths in val_loader:
                 inputs, labels = inputs.to(device), labels.to(device)
                 # Extract features from ResNet
@@ -121,14 +122,29 @@ def evaluate_model(model, val_loaders, device='cuda', num_samples=50):
                 _, preds = torch.max(mean_probs, 1)
                 all_preds.extend(preds.cpu().numpy())
                 all_labels.extend(labels.cpu().numpy())
+                
+                # Collect probabilities for AUC
+                all_fake_probs.extend(mean_probs[:, 1].cpu().numpy())
+
                 # For predicted fake images (class 1), record prob of fake
                 fake_mask = (preds == 1).cpu()
                 if fake_mask.any():
                     fake_probs.extend(mean_probs[fake_mask, 1].cpu().numpy())
+            
             report = classification_report(all_labels, all_preds, target_names=['nature', 'ai'], output_dict=True)
+            
+            # Calculate AUC
+            try:
+                auc = roc_auc_score(all_labels, all_fake_probs)
+            except ValueError:
+                auc = 0.0
+            
+            report['auc'] = auc
             results[ai_type] = report
+            
             print(f'Results for {ai_type}:')
             print(classification_report(all_labels, all_preds, target_names=['nature', 'ai']))
+            print(f'AUC for {ai_type}: {auc:.4f}')
             if fake_probs:
                 print(f'Fake probabilities for {ai_type}: mean={sum(fake_probs)/len(fake_probs):.4f}, samples={len(fake_probs)}')
     return results
