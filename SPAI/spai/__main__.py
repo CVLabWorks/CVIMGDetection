@@ -162,7 +162,7 @@ def train(
         "learning_rate": learning_rate,
         "data_path": str(data_path),
         "csv_root_dir": str(csv_root_dir),
-        "lmdb_path": str(lmdb_path),
+        "lmdb_path": str(lmdb_path) if lmdb_path is not None else None,
         "pretrained": str(pretrained) if pretrained is not None else None,
         "resume": resume,
         "accumulation_steps": accumulation_steps,
