@@ -1,206 +1,239 @@
 # SPAI: Spectral AI-Generated Image Detector
-__Official code repository for the CVPR2025 paper [Any-Resolution AI-Generated Image Detection by Spectral Learning](https://openaccess.thecvf.com/content/CVPR2025/html/Karageorgiou_Any-Resolution_AI-Generated_Image_Detection_by_Spectral_Learning_CVPR_2025_paper.html).__
 
-<div align="center";">
+基于 [CVPR2025 论文](https://openaccess.thecvf.com/content/CVPR2025/html/Karageorgiou_Any-Resolution_AI-Generated_Image_Detection_by_Spectral_Learning_CVPR_2025_paper.html) 的 AI 生成图像检测器，使用自定义数据集进行训练。
 
-**Dimitrios Karageorgiou<sup>1,2</sup>, Symeon Papadopoulos<sup>1</sup>, Ioannis Kompatsiaris<sup>1</sup>, Efstratios Gavves<sup>2,3</sup>**
+## 项目概述
 
-<sup>1</sup> Information Technologies Institute, CERTH, Greece  
-<sup>2</sup> University of Amsterdam, The Netherlands  
-<sup>3</sup> Archimedes/Athena RC, Greece
+SPAI 通过频谱学习来检测 AI 生成的图像。它在自监督设置下学习真实图像的频谱分布，然后使用频谱重建相似度将 AI 生成的图像检测为该学习模型的分布外样本。
 
-</div>
+**本仓库基于原始 SPAI 代码进行了修改，支持自定义数据集训练。**
 
-<p align="center">
-    <img src="docs/overview.svg" alt="Paper Overview" />
-</p>
+## 代码修改
 
-**SPAI employs spectral learning to learn the spectral distribution of real 
-images under a self-supervised setup. Then, using the spectral 
-reconstruction similarity it detects AI-generated images as out-of-distribution 
-samples of this learned model.**
+### Bug 修复
 
-### :newspaper: News
+- **`spai/__main__.py`**: 修复了 `lmdb_path` 参数处理的 bug
+  ```python
+  # 原代码（bug）
+  "lmdb_path": str(lmdb_path),  # str(None) = "None" 导致错误
+  
+  # 修复后
+  "lmdb_path": str(lmdb_path) if lmdb_path is not None else None,
+  ```
 
-- 28/03/25: Code released.
-- 27/02/25: Paper accepted on CVPR2025.
+### 新增文件
 
-## :hammer: Installation
+| 文件 | 说明 |
+|------|------|
+| `create_my_dataset_csv.py` | 自定义数据集 CSV 生成脚本 |
+| `start_training.sh` | 训练启动脚本（含 Neptune 配置） |
+| `dataset/my_dataset.csv` | 生成的数据集描述文件 |
+| `CLAUDE.md` | Claude Code 开发指南 |
 
-### Hardware requirements
+## 数据集
 
-The code originally targeted Nvidia L40S 48GB GPUs. Nevertheless, many recent cuda-enabled GPUs should be
-supported. Inference should be effortlessly performed with less than 8GB of GPU RAM. However, as training originally
-targeted a 48GB GPU, an equivalent GPU should be present to replicate the paper's training setup. 
+### 数据集结构
 
-### Required libraries
-To train and evaluate SPAI an anaconda environment can be used for installing all the 
-required dependencies as following:
+```
+dataset/
+└── mini_gen/
+    ├── imagenet_ai_0419_biggan/
+    │   ├── train/
+    │   │   ├── ai/        # AI 生成图像
+    │   │   └── nature/    # 真实图像
+    │   └── val/
+    │       ├── ai/
+    │       └── nature/
+    ├── imagenet_ai_0419_vqdm/
+    ├── imagenet_ai_0424_sdv5/
+    ├── imagenet_ai_0424_wukong/
+    ├── imagenet_ai_0508_adm/
+    ├── imagenet_glide/
+    └── imagenet_midjourney/
+```
+
+### 数据集统计
+
+| 类别 | 数量 |
+|------|------|
+| **总图像数** | 35,000 张 |
+| 训练集 | 28,000 张 |
+| 验证集 | 7,000 张 |
+| AI 生成图像 | 17,500 张 |
+| 真实图像 | 17,500 张 |
+
+### 包含的生成器
+
+- BigGAN
+- VQDM
+- Stable Diffusion v5
+- Wukong
+- ADM
+- GLIDE
+- Midjourney
+
+## 环境安装
 
 ```bash
+# 创建 conda 环境
 conda create -n spai python=3.11
 conda activate spai
+
+# 安装 PyTorch（需要 CUDA 支持）
 conda install pytorch torchvision torchaudio pytorch-cuda=12.4 -c pytorch -c nvidia
+
+# 安装其他依赖
 pip install -r requirements.txt
 ```
 
-Furthermore, the installation of [Nvidia APEX](https://github.com/NVIDIA/apex) is required for training.  
+**硬件要求**：
+- 推理：< 8GB GPU 显存
+- 训练：建议 24GB+ GPU 显存（使用梯度累积可降低要求）
 
-### Weights Checkpoint
+## 预训练模型
 
-The trained weights checkpoint can be downloaded [here](https://drive.google.com/file/d/1vvXmZqs6TVJdj8iF1oJ4L_fcgdQrp_YI/view?usp=sharing) 
-and should be placed under the `weights` directory, located under the project's root directory.
+下载预训练的 ViT-B/16 MFM 模型，放置到 `weights/` 目录：
 
-## :fire: Inference
+```
+weights/
+└── mfm_pretrain_vit_base.pth
+```
 
-To compute the predicted scores for a set of images, place them under a directory
-and use the following command.
+下载地址：[MFM GitHub](https://github.com/Jiahao000/MFM)
+
+## 快速开始
+
+### 1. 生成数据集 CSV（如需重新生成）
 
 ```bash
-python -m spai infer --input <input_dir> --output <output_dir>
+python create_my_dataset_csv.py
 ```
 
-where:
-- `input_dir`: is a directory where the input images are located,
-- `output_dir`: is a directory where a csv file with the predictions will be written.
+### 2. 配置训练脚本
 
-The `--input` option also accepts CSV files containing the paths of the images. The CSV
-files of the evaluation set, included under the `data` directory, can be used as examples.
-For downloading the images of these evaluation CSVs, check the instruction [here](docs/data.md).
-
-## :triangular_ruler: Architecture Overview
-
-<p align="center">
-    <img src="docs/architecture.svg" alt="Overview of the SPAI architecture" />
-</p>
-
-We learn a model of the spectral distribution of real images under a self-supervised setup using
-masked spectral learning. Then, we use the spectral reconstruction similarity to measure the divergence from this learned distribution and
-detect AI-generated images as out-of-distribution samples of this model. Spectral context vector captures the spectral context under which
-the spectral reconstruction similarity values are computed, while spectral context attention enables the processing of any-resolution images
-for capturing subtle spectral inconsistencies.
-
-## :muscle: Training
-
-### Required pre-trained model
-Download the pre-trained ViT-B/16 MFM model from its [public repo](https://github.com/Jiahao000/MFM)
-and place it under the `weights` directory:
-```txt
-weights
-|_ mfm_pretrain_vit_base.pth
-```
-
-### Required data
-Latent diffusion training and validation data can be downloaded from their corresponding [repo](https://github.com/grip-unina/DMimageDetection).
-Furthermore, the corresponding instructions for downloading COCO and LSUN should be followed. 
-They should be placed under the `datasets` directory as following:
-```txt
-datasets
-|_latent_diffusion_trainingset
-  |_train
-    ...
-  |_val
-    ...
-|_COCO
-  ...
-|_LSUN
-  ...
-```
-
-Then, a csv file describing these data should be created as following:
+编辑 `start_training.sh`，填入你的 Neptune 配置：
 
 ```bash
-python spai/create_dmid_ldm_train_val_csv.py \
-  --train_dir "./datasets/latent_diffusion_trainingset/train" \
-  --val_dir "./datasets/latent_diffusion_trainingset/val" \
-  --coco_dir "./datasets/COCO" \
-  --lsun_dir "./datasets/LSUN" \
-  -o "./datasets/ldm_train_val.csv"
+export NEPTUNE_API_TOKEN="your_api_token_here"
+export NEPTUNE_PROJECT="yourname/spai-training"
 ```
 
-The validation split can be augmented as following:
-
+如果不使用 Neptune，添加：
 ```bash
-python spai/tools/augment_dataset.py \
-  --cfg ./configs/vit_base/vit_base__multipatch__100ep__intermediate__restore__patch_proj_per_feature__last_proj_layer_no_activ__fre_orig_branch__all_layers__bce_loss__light_augmentations.yaml \
-  -c ./datasets/ldm_val.csv \
-  -o ./datasets/ldm_val_augm.csv \
-  -d ./datasets/latent_diffusion_trainingset_augm
+export NEPTUNE_MODE="offline"
 ```
 
-Then, training can be performed as following:
+### 3. 开始训练
 
 ```bash
-python -m spai train \
-  --cfg "./configs/spai.yaml" \
-  --batch-size 72 \
-  --pretrained "./weights/mfm_pretrain_vit_base.pth" \
-  --output "./output/train" \
-  --data-path "./datasets/ldm_train_val.csv" \
-  --tag "spai" \
-  --amp-opt-level "O2" \
+./start_training.sh
+```
+
+或手动运行：
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python -m spai train \
+  --cfg ./configs/spai.yaml \
+  --batch-size 4 \
+  --accumulation-steps 18 \
+  --pretrained ./weights/mfm_pretrain_vit_base.pth \
+  --output ./output/train \
+  --data-path ./dataset/my_dataset.csv \
+  --tag "my_training" \
+  --amp-opt-level "O0" \
   --data-workers 8 \
   --save-all \
-  --opt "DATA.VAL_BATCH_SIZE" "256" \
-  --opt "MODEL.FEATURE_EXTRACTION_BATCH" "400" \
-  --opt "DATA.TEST_PREFETCH_FACTOR" "1"
+  --opt "DATA.VAL_BATCH_SIZE" "4" \
+  --opt "MODEL.FEATURE_EXTRACTION_BATCH" "32" \
+  --opt "TRAIN.EPOCHS" "20"
 ```
 
-## :mag_right: Evaluation
+## 训练参数说明
 
-When a model has been trained using the previous script, it can be evaluated as following:
+### 核心参数
+
+| 参数 | 默认值 | 说明 |
+|------|--------|------|
+| `--batch-size` | 4 | 训练批次大小 |
+| `--accumulation-steps` | 18 | 梯度累积步数（有效batch = 4×18=72） |
+| `--amp-opt-level` | O0 | 混合精度（O0=禁用，O1/O2=启用，需要APEX） |
+| `--data-workers` | 8 | 数据加载进程数 |
+
+### 配置覆盖参数（通过 `--opt`）
+
+| 参数 | 默认值 | 说明 |
+|------|--------|------|
+| `TRAIN.EPOCHS` | 35 | 训练轮数 |
+| `TRAIN.BASE_LR` | 5e-4 | 基础学习率 |
+| `TRAIN.CLIP_GRAD` | None | 梯度裁剪（建议设为1.0） |
+| `DATA.VAL_BATCH_SIZE` | 256 | 验证批次大小 |
+| `MODEL.FEATURE_EXTRACTION_BATCH` | 400 | 特征提取批次 |
+
+### 显存不足时的建议配置
+
+```bash
+--batch-size 4 \
+--opt "DATA.VAL_BATCH_SIZE" "4" \
+--opt "MODEL.FEATURE_EXTRACTION_BATCH" "32"
+```
+
+## 推理
+
+使用训练好的模型进行推理：
+
+```bash
+python -m spai infer \
+  --input <图像目录或CSV文件> \
+  --output <输出目录> \
+  --model ./output/train/finetune/<tag>/ckpt_epoch_<N>.pth
+```
+
+## 测试/评估
 
 ```bash
 python -m spai test \
-  --cfg "./configs/spai.yaml" \
+  --cfg ./configs/spai.yaml \
   --batch-size 8 \
-  --model "./output/train/finetune/spai/<epoch_name>.pth" \
-  --output "./output/spai/test" \
-  --tag "spai" \
-  --opt "MODEL.PATCH_VIT.MINIMUM_PATCHES" "4" \
-  --opt "DATA.NUM_WORKERS" "8" \
-  --opt "MODEL.FEATURE_EXTRACTION_BATCH" "400" \
-  --opt "DATA.TEST_PREFETCH_FACTOR" "1" \
-  --test-csv "<test_csv_path>"
+  --model ./output/train/finetune/<tag>/ckpt_epoch_<N>.pth \
+  --output ./output/test \
+  --tag "test" \
+  --test-csv ./dataset/my_dataset.csv \
+  --opt "DATA.NUM_WORKERS" "8"
 ```
 
-where:
-- `test_csv_path`: Path to a csv file including the paths of the testing data.
-- `epoch_name`: Filename of the epoch selected during validation. 
+## 项目结构
 
-## :star2: Acknowledgments
-
-This work was partly supported by the Horizon Europe
-projects [ELIAS](https://elias-ai.eu/) (grant no. 101120237) and [vera.ai](https://www.veraai.eu/home) (grant
-no. 101070093). The computational resources were granted
-with the support of [GRNET](https://grnet.gr/en/).
-
-Pieces of code from the [MFM](https://github.com/Jiahao000/MFM) project 
-have been used as a basis for developing this project. We thank its 
-authors for their contribution.
-
-## :black_nib: License & Contact
-
-This project will download and install additional third-party open 
-source software projects. Also, all the employed third-party data 
-retain their original license. Review their license terms 
-before use.  
-
-The source code and model weights of this project are released under 
-the [Apache 2 License](https://www.apache.org/licenses/LICENSE-2.0).
-
-For any question you can contact [d.karageorgiou@uva.nl](mailto:d.karageorgiou@uva.nl). 
-
-## :scroll: Citation
-
-If you found this work useful for your research, you can cite the following paper:
-
-```text
-@inproceedings{karageorgiou2025any,
-  title={Any-resolution ai-generated image detection by spectral learning},
-  author={Karageorgiou, Dimitrios and Papadopoulos, Symeon and Kompatsiaris, Ioannis and Gavves, Efstratios},
-  booktitle={Proceedings of the Computer Vision and Pattern Recognition Conference},
-  pages={18706--18717},
-  year={2025}
-}
 ```
+spai/
+├── configs/
+│   └── spai.yaml              # 主配置文件
+├── dataset/
+│   ├── mini_gen/              # 图像数据
+│   └── my_dataset.csv         # 数据集描述
+├── spai/
+│   ├── __main__.py            # CLI 入口
+│   ├── models/                # 模型实现
+│   │   ├── sid.py             # SPAI 模型
+│   │   ├── vision_transformer.py
+│   │   └── filters.py         # 频谱滤波
+│   ├── data/                  # 数据加载
+│   └── tools/                 # 工具脚本
+├── weights/                   # 预训练权重
+├── output/                    # 训练输出
+├── create_my_dataset_csv.py   # 数据集生成脚本
+├── start_training.sh          # 训练启动脚本
+└── CLAUDE.md                  # 开发指南
+```
+
+## Neptune 实验跟踪
+
+本项目集成了 Neptune.ai 进行实验跟踪：
+
+1. 注册账号：https://neptune.ai/
+2. 获取 API Token：https://app.neptune.ai/get_my_api_token
+3. 设置环境变量：
+   ```bash
+   export NEPTUNE_API_TOKEN="your_token"
+   export NEPTUNE_PROJECT="workspace/project"
+   ```
+
