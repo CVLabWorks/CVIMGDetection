@@ -8,7 +8,6 @@ from datetime import datetime
 from sklearn.metrics import classification_report, accuracy_score
 import numpy as np
 
-# 🔥 AMP 支持
 from torch.amp import autocast, GradScaler
 
 
@@ -23,7 +22,6 @@ class Trainer:
         self.model.to(self.device)
         self.criterion = nn.CrossEntropyLoss()
 
-        # 优化所有可训练参数（你的模型中分类头是可训练的）
         params = filter(lambda p: p.requires_grad, self.model.parameters())
         self.optimizer = torch.optim.AdamW(
             params,
@@ -42,21 +40,20 @@ class Trainer:
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         log_dir = os.path.join(config.LOG_DIR, f"{config.MODEL_TYPE}_{timestamp}")
         self.writer = SummaryWriter(log_dir)
-        print(f"📊 TensorBoard 日志目录: {log_dir}")
+        print(f"TensorBoard 日志目录: {log_dir}")
 
         self.best_val_loss = float('inf')
         self.epochs_no_improve = 0
         os.makedirs(config.CHECKPOINT_DIR, exist_ok=True)
 
-        # 🔥 AMP 初始化
         self.use_amp = config.USE_AMP and (self.device.type == 'cuda')
         if self.use_amp:
-            self.scaler = GradScaler(device='cuda')  # ✅ 更新为 torch.amp.GradScaler(device='cuda')
-            print("⚡ 已启用混合精度训练 (AMP)")
+            self.scaler = GradScaler(device='cuda')  
+            print("已启用混合精度训练 (AMP)")
         else:
             self.scaler = None
             if config.USE_AMP:
-                print("⚠️ USE_AMP=True，但设备非 CUDA，AMP 已禁用")
+                print(" USE_AMP=True，但设备非 CUDA，AMP 已禁用")
 
     def train_epoch(self):
         self.model.train()
@@ -64,13 +61,13 @@ class Trainer:
         correct = 0
         total = 0
 
-        pbar = tqdm(self.train_loader, desc="  ➤ 训练中", leave=False)
+        pbar = tqdm(self.train_loader, desc=" 训练中", leave=False)
         for x, y in pbar:
             x, y = x.to(self.device), y.to(self.device)
             self.optimizer.zero_grad()
 
             if self.use_amp:
-                with autocast(device_type=self.device.type):  # ✅ 更新为 torch.amp.autocast(device_type='cuda')
+                with autocast(device_type=self.device.type): 
                     outputs = self.model(x)
                     loss = self.criterion(outputs, y)
                 self.scaler.scale(loss).backward()
@@ -98,11 +95,11 @@ class Trainer:
         all_labels = []
 
         with torch.no_grad():
-            for x, y in tqdm(self.val_loader, desc="  ➤ 验证中", leave=False):
+            for x, y in tqdm(self.val_loader, desc="   验证中", leave=False):
                 x, y = x.to(self.device), y.to(self.device)
 
                 if self.use_amp:
-                    with autocast(device_type=self.device.type):  # ✅ 更新为 torch.amp.autocast(device_type='cuda')
+                    with autocast(device_type=self.device.type): 
                         outputs = self.model(x)
                         loss = self.criterion(outputs, y)
                 else:
@@ -148,7 +145,7 @@ class Trainer:
         return metrics
 
     def fit(self):
-        print("🚀 开始训练...\n")
+        print("开始训练...\n")
 
         for epoch in range(self.config.EPOCHS):
             print(f"{'=' * 20} Epoch {epoch + 1:2d} / {self.config.EPOCHS} {'=' * 20}")
@@ -168,7 +165,7 @@ class Trainer:
             }, epoch)
             self.writer.add_scalar("Learning Rate", self.optimizer.param_groups[0]['lr'], epoch)
 
-            print(f"📈 Epoch {epoch + 1:2d} | "
+            print(f" Epoch {epoch + 1:2d} | "
                   f"Train Acc: {tr_acc:6.2f}% | "
                   f"Val Acc: {val_metrics['accuracy'] * 100:6.2f}% | "
                   f"Val Loss: {val_metrics['loss']:.5f}")
@@ -179,17 +176,17 @@ class Trainer:
                 self.epochs_no_improve = 0
                 save_path = os.path.join(self.config.CHECKPOINT_DIR, "best_model.pth")
                 torch.save(self.model.state_dict(), save_path)
-                print(f"✅ 最佳模型已保存 (Val Loss: {val_metrics['loss']:.5f})")
+                print(f" 最佳模型已保存 (Val Loss: {val_metrics['loss']:.5f})")
             else:
                 self.epochs_no_improve += 1
-                print(f"⚠️ 验证损失未显著下降（连续 {self.epochs_no_improve}/{self.config.EARLY_STOPPING_PATIENCE} 次）")
+                print(f"验证损失未显著下降（连续 {self.epochs_no_improve}/{self.config.EARLY_STOPPING_PATIENCE} 次）")
 
             if self.epochs_no_improve >= self.config.EARLY_STOPPING_PATIENCE:
-                print(f"\n🛑 早停触发！在 Epoch {epoch + 1} 停止训练。")
+                print(f"\n 早停触发！在 Epoch {epoch + 1} 停止训练。")
                 break
 
         self.writer.close()
-        print(f"\n🎉 训练完成！最低验证损失: {self.best_val_loss:.5f}")
+        print(f"\n 训练完成！最低验证损失: {self.best_val_loss:.5f}")
 
 
 class TransferLearningTrainer:
@@ -204,7 +201,7 @@ class TransferLearningTrainer:
         self.model.to(self.device)
         self.criterion = nn.CrossEntropyLoss()
 
-        # 优化所有可训练参数（你的模型中分类头是可训练的）
+
         params = filter(lambda p: p.requires_grad, self.model.parameters())
         self.optimizer = torch.optim.AdamW(
             params,
@@ -223,21 +220,21 @@ class TransferLearningTrainer:
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         log_dir = os.path.join(config.LOG_DIR, f"transfer_{config.MODEL_TYPE}_{timestamp}")
         self.writer = SummaryWriter(log_dir)
-        print(f"📊 TensorBoard 日志目录: {log_dir}")
+        print(f"TensorBoard 日志目录: {log_dir}")
 
         self.best_val_loss = float('inf')
         self.epochs_no_improve = 0
         os.makedirs(config.CHECKPOINT_DIR, exist_ok=True)
 
-        # 🔥 AMP 初始化
+
         self.use_amp = config.USE_AMP and (self.device.type == 'cuda')
         if self.use_amp:
-            self.scaler = GradScaler(device='cuda')  # ✅ 更新为 torch.amp.GradScaler(device='cuda')
-            print("⚡ 已启用混合精度训练 (AMP)")
+            self.scaler = GradScaler(device='cuda')  
+            print(" 已启用混合精度训练 (AMP)")
         else:
             self.scaler = None
             if config.USE_AMP:
-                print("⚠️ USE_AMP=True，但设备非 CUDA，AMP 已禁用")
+                print(" USE_AMP=True，但设备非 CUDA，AMP 已禁用")
 
     def train_epoch(self):
         self.model.train()
@@ -251,7 +248,7 @@ class TransferLearningTrainer:
             self.optimizer.zero_grad()
 
             if self.use_amp:
-                with autocast(device_type=self.device.type):  # ✅ 更新为 torch.amp.autocast(device_type='cuda')
+                with autocast(device_type=self.device.type):  
                     outputs = self.model(x)
                     loss = self.criterion(outputs, y)
                 self.scaler.scale(loss).backward()
@@ -283,7 +280,7 @@ class TransferLearningTrainer:
                 x, y = x.to(self.device), y.to(self.device)
 
                 if self.use_amp:
-                    with autocast(device_type=self.device.type):  # ✅ 更新为 torch.amp.autocast(device_type='cuda')
+                    with autocast(device_type=self.device.type): 
                         outputs = self.model(x)
                         loss = self.criterion(outputs, y)
                 else:
@@ -301,7 +298,7 @@ class TransferLearningTrainer:
         avg_loss = total_loss / len(self.val_loader)
         accuracy = accuracy_score(all_labels, all_preds)
 
-        # 为转移学习创建更通用的分类报告
+
         unique_labels = np.unique(all_labels)
         target_names = [f"Class_{i}" for i in unique_labels] if len(unique_labels) <= 10 else [f"Class_{i}" for i in
                                                                                                range(
@@ -315,7 +312,6 @@ class TransferLearningTrainer:
                 zero_division=0
             )
         except:
-            # 如果标签名称与实际标签不匹配，使用默认名称
             report = classification_report(
                 all_labels, all_preds,
                 output_dict=True,
@@ -354,25 +350,24 @@ class TransferLearningTrainer:
             self.writer.add_scalar("Learning Rate", self.optimizer.param_groups[0]['lr'], epoch)
             self.writer.add_scalar("F1-Score", val_metrics['macro_f1'], epoch)
 
-            print(f"📈 Epoch {epoch + 1:2d} | "
+            print(f" Epoch {epoch + 1:2d} | "
                   f"Train Acc: {tr_acc:6.2f}% | "
                   f"Val Acc: {val_metrics['accuracy'] * 100:6.2f}% | "
                   f"Val Loss: {val_metrics['loss']:.5f}")
 
-            # 保存最佳模型
             if val_metrics['loss'] < self.best_val_loss - self.config.EARLY_STOPPING_MIN_DELTA:
                 self.best_val_loss = val_metrics['loss']
                 self.epochs_no_improve = 0
                 save_path = os.path.join(self.config.CHECKPOINT_DIR, "transfer_best_model.pth")
                 torch.save(self.model.state_dict(), save_path)
-                print(f"✅ 最佳模型已保存 (Val Loss: {val_metrics['loss']:.5f})")
+                print(f" 最佳模型已保存 (Val Loss: {val_metrics['loss']:.5f})")
             else:
                 self.epochs_no_improve += 1
-                print(f"⚠️ 验证损失未显著下降（连续 {self.epochs_no_improve}/{self.config.EARLY_STOPPING_PATIENCE} 次）")
+                print(f" 验证损失未显著下降（连续 {self.epochs_no_improve}/{self.config.EARLY_STOPPING_PATIENCE} 次）")
 
             if self.epochs_no_improve >= self.config.EARLY_STOPPING_PATIENCE:
-                print(f"\n🛑 早停触发！在 Epoch {epoch + 1} 停止训练。")
+                print(f"\n 早停触发！在 Epoch {epoch + 1} 停止训练。")
                 break
 
         self.writer.close()
-        print(f"\n🎉 迁移学习训练完成！最低验证损失: {self.best_val_loss:.5f}")
+        print(f"\n 迁移学习训练完成！最低验证损失: {self.best_val_loss:.5f}")
