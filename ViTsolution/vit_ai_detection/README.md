@@ -33,6 +33,7 @@ Linear(256 → num_classes)
 | **Accuracy**  |           |        | 0.8703   | 6500    |
 | **Macro Avg** | 0.8695    | 0.8697 | 0.8696   | 6500    |
 | **Weighted Avg** | 0.8704 | 0.8703 | 0.8703   | 6500    |
+
 Overall Accuracy: 0.8703
 
 ---
@@ -66,6 +67,7 @@ Conv2d(64 → 768, k=1)
 | **Accuracy**  |           |        | 0.8746   | 6500    |
 | **Macro Avg** | 0.8738    | 0.8757 | 0.8743   | 6500    |
 | **Weighted Avg** | 0.8760 | 0.8746 | 0.8748   | 6500    |
+
 Overall Accuracy: 0.8746
 
 ---
