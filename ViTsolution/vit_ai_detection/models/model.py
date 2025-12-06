@@ -91,18 +91,16 @@ class ViTWithLPMAndRegularizedHead(nn.Module):
         self.old_classifier = None
         if old_head_state_dict is not None:
             old_num_classes = next(reversed(old_head_state_dict.values())).shape[0]
-            self.classifier = nn.Sequential(
+            self.old_classifier = nn.Sequential(
                 nn.Linear(hidden_size, 512),
-                nn.BatchNorm1d(512, affine=False),  
+                nn.BatchNorm1d(512, affine=False),
                 nn.GELU(),
                 nn.Dropout(0.3),
-
                 nn.Linear(512, 256),
                 nn.BatchNorm1d(256, affine=False),
                 nn.GELU(),
                 nn.Dropout(0.3),
-
-                nn.Linear(256, num_classes)
+                nn.Linear(256, old_num_classes)
             )
             self.old_classifier.load_state_dict(old_head_state_dict)
             for param in self.old_classifier.parameters():
@@ -292,3 +290,4 @@ class CvTWithCustomHead(nn.Module):
         logits = self.classifier(pooled_output)
 
         return logits
+
